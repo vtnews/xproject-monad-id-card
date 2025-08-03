@@ -1,80 +1,220 @@
-# 🏗 Scaffold-ETH 2
+# MBTI性格测定dApp - 产品需求文档 (PRD)
 
-<h4 align="center">
-  <a href="https://docs.scaffoldeth.io">Documentation</a> |
-  <a href="https://scaffoldeth.io">Website</a>
-</h4>
+## 1. 产品概述
 
-🧪 An open-source, up-to-date toolkit for building decentralized applications (dapps) on the Ethereum blockchain. It's designed to make it easier for developers to create and deploy smart contracts and build user interfaces that interact with those contracts.
+### 1.1 产品名称
+**MBTI性格测定dApp** - 基于区块链的简易MBTI性格测试工具
 
-⚙️ Built using NextJS, RainbowKit, Hardhat, Wagmi, Viem, and Typescript.
+### 1.2 产品定位
+一款轻量级的MBTI性格测定工具，用户可以通过简单的测试获得自己的MBTI性格类型，并将结果永久记录在区块链上。
 
-- ✅ **Contract Hot Reload**: Your frontend auto-adapts to your smart contract as you edit it.
-- 🪝 **[Custom hooks](https://docs.scaffoldeth.io/hooks/)**: Collection of React hooks wrapper around [wagmi](https://wagmi.sh/) to simplify interactions with smart contracts with typescript autocompletion.
-- 🧱 [**Components**](https://docs.scaffoldeth.io/components/): Collection of common web3 components to quickly build your frontend.
-- 🔥 **Burner Wallet & Local Faucet**: Quickly test your application with a burner wallet and local faucet.
-- 🔐 **Integration with Wallet Providers**: Connect to different wallet providers and interact with the Ethereum network.
+### 1.3 目标用户
+- 对MBTI性格测试感兴趣的用户
+- 希望了解自己性格类型的用户
+- 想要在区块链上永久保存测试结果的用户
 
-![Debug Contracts tab](https://github.com/scaffold-eth/scaffold-eth-2/assets/55535804/b237af0c-5027-4849-a5c1-2e31495cccb1)
+## 2. 核心功能
 
-## Requirements
+### 2.1 主要功能模块
 
-Before you begin, you need to install the following tools:
+#### 2.1.1 性格测试模块
+- **测试题目**: 8道精选MBTI题目，覆盖4个维度
+- **题目类型**: 单选题，每题2个选项
+- **测试流程**: 
+  - 用户连接钱包
+  - 开始测试
+  - 逐题作答
+  - 提交结果
 
-- [Node (>= v20.18.3)](https://nodejs.org/en/download/)
-- Yarn ([v1](https://classic.yarnpkg.com/en/docs/install/) or [v2+](https://yarnpkg.com/getting-started/install))
-- [Git](https://git-scm.com/downloads)
+#### 2.1.2 结果展示模块
+- **MBTI类型**: 显示16种MBTI性格类型之一
+- **类型描述**: 简洁的性格特征描述
+- **区块链记录**: 将测试结果永久存储在区块链上
+- **分享功能**: 生成可分享的结果链接
 
-## Quickstart
+#### 2.1.3 历史记录模块
+- **个人历史**: 查看自己之前的测试记录
+- **结果对比**: 比较不同时间的测试结果
 
-To get started with Scaffold-ETH 2, follow the steps below:
+### 2.2 技术特性
+- **去中心化**: 测试结果存储在区块链上，不可篡改
+- **隐私保护**: 用户可以选择匿名测试
+- **永久保存**: 测试结果永久保存在区块链上
+- **透明可信**: 所有测试逻辑和结果公开透明
 
-1. Install dependencies if it was skipped in CLI:
+## 3. 用户界面设计
+
+### 3.1 页面结构
+
+#### 3.1.1 首页 (`/`)
+- 产品介绍
+- 开始测试按钮
+- 连接钱包提示
+
+#### 3.1.2 测试页面 (`/test`)
+- 进度条显示
+- 当前题目展示
+- 选项按钮
+- 上一题/下一题导航
+
+#### 3.1.3 结果页面 (`/result`)
+- MBTI类型展示
+- 性格描述
+- 区块链交易信息
+- 分享按钮
+- 重新测试按钮
+
+#### 3.1.4 历史页面 (`/history`)
+- 个人测试历史
+- 结果时间线
+- 详细查看功能
+
+### 3.2 设计风格
+- **简洁现代**: 采用简洁的UI设计
+- **色彩搭配**: 使用MBTI相关的色彩主题
+- **响应式**: 支持移动端和桌面端
+
+## 4. 智能合约设计
+
+### 4.1 合约功能
+
+#### 4.1.1 MBTI测试合约
+```solidity
+// 主要功能
+- 提交测试结果
+- 查询用户历史记录
+- 获取测试统计信息
+```
+
+#### 4.1.2 数据结构
+```solidity
+struct TestResult {
+    address user;
+    string mbtiType;
+    uint256 timestamp;
+    uint8[] answers;
+}
+```
+
+### 4.2 合约方法
+- `submitTestResult(string memory mbtiType, uint8[] memory answers)`
+- `getUserResults(address user)`
+- `getAllResults()`
+
+## 5. 测试题目设计
+
+### 5.1 题目结构 (8题)
+1. **E/I维度**: 你更喜欢独处还是社交？
+2. **E/I维度**: 在团队中你更倾向于？
+3. **S/N维度**: 你更关注细节还是整体？
+4. **S/N维度**: 解决问题时你更依赖？
+5. **T/F维度**: 做决定时你更看重？
+6. **T/F维度**: 处理冲突时你更倾向于？
+7. **J/P维度**: 你更喜欢计划还是随机？
+8. **J/P维度**: 面对新项目你更倾向于？
+
+### 5.2 结果计算逻辑
+- 每个维度根据答案计算倾向性
+- 生成对应的MBTI四字母代码
+- 匹配16种性格类型
+
+## 6. 开发计划
+
+### 6.1 开发阶段 (4小时)
+
+#### 阶段1: 智能合约开发 (1小时)
+- [ ] 编写MBTI测试合约
+- [ ] 部署合约到本地网络
+- [ ] 测试合约功能
+
+#### 阶段2: 前端页面开发 (2小时)
+- [ ] 创建测试页面组件
+- [ ] 实现题目展示逻辑
+- [ ] 开发结果计算算法
+- [ ] 集成区块链交互
+
+#### 阶段3: 结果展示开发 (1小时)
+- [ ] 设计结果页面
+- [ ] 实现MBTI类型展示
+- [ ] 添加分享功能
+- [ ] 优化用户体验
+
+### 6.2 技术栈
+- **前端**: Next.js + TypeScript + Tailwind CSS
+- **区块链**: Hardhat + Solidity
+- **钱包集成**: RainbowKit + Wagmi
+- **UI组件**: Scaffold-ETH 2组件库
+
+## 7. 项目文件结构
 
 ```
-cd my-dapp-example
-yarn install
+packages/
+├── hardhat/
+│   ├── contracts/
+│   │   └── MBTITest.sol
+│   ├── deploy/
+│   │   └── 01_deploy_mbti.js
+│   └── test/
+│       └── MBTITest.test.js
+└── nextjs/
+    ├── app/
+    │   ├── page.tsx (首页)
+    │   ├── test/
+    │   │   └── page.tsx (测试页)
+    │   ├── result/
+    │   │   └── page.tsx (结果页)
+    │   └── history/
+    │       └── page.tsx (历史页)
+    ├── components/
+    │   ├── TestQuestion.tsx
+    │   ├── TestProgress.tsx
+    │   ├── ResultDisplay.tsx
+    │   └── HistoryList.tsx
+    └── hooks/
+        └── useMBTITest.ts
 ```
 
-2. Run a local network in the first terminal:
+## 8. 成功指标
 
-```
-yarn chain
-```
+### 8.1 功能指标
+- [ ] 用户能够完成完整的MBTI测试
+- [ ] 测试结果正确计算并显示
+- [ ] 结果成功保存到区块链
+- [ ] 用户可以查看历史记录
 
-This command starts a local Ethereum network using Hardhat. The network runs on your local machine and can be used for testing and development. You can customize the network configuration in `packages/hardhat/hardhat.config.ts`.
+### 8.2 用户体验指标
+- [ ] 测试流程流畅，无卡顿
+- [ ] 界面美观，符合现代设计标准
+- [ ] 移动端适配良好
+- [ ] 钱包连接稳定
 
-3. On a second terminal, deploy the test contract:
+## 9. 风险与应对
 
-```
-yarn deploy
-```
+### 9.1 技术风险
+- **合约部署失败**: 准备备用部署方案
+- **前端集成问题**: 使用成熟的Scaffold-ETH 2框架
+- **钱包连接问题**: 提供详细的使用说明
 
-This command deploys a test smart contract to the local network. The contract is located in `packages/hardhat/contracts` and can be modified to suit your needs. The `yarn deploy` command uses the deploy script located in `packages/hardhat/deploy` to deploy the contract to the network. You can also customize the deploy script.
+### 9.2 时间风险
+- **开发时间不足**: 优先实现核心功能
+- **测试时间不够**: 简化测试流程
+- **部署时间紧张**: 提前准备部署脚本
 
-4. On a third terminal, start your NextJS app:
+## 10. 后续扩展计划
 
-```
-yarn start
-```
+### 10.1 功能扩展
+- 添加更多MBTI相关功能
+- 支持结果分享到社交媒体
+- 添加用户社区功能
 
-Visit your app on: `http://localhost:3000`. You can interact with your smart contract using the `Debug Contracts` page. You can tweak the app config in `packages/nextjs/scaffold.config.ts`.
+### 10.2 技术扩展
+- 支持多链部署
+- 添加NFT徽章系统
+- 集成更多钱包类型
 
-Run smart contract test with `yarn hardhat:test`
+---
 
-- Edit your smart contracts in `packages/hardhat/contracts`
-- Edit your frontend homepage at `packages/nextjs/app/page.tsx`. For guidance on [routing](https://nextjs.org/docs/app/building-your-application/routing/defining-routes) and configuring [pages/layouts](https://nextjs.org/docs/app/building-your-application/routing/pages-and-layouts) checkout the Next.js documentation.
-- Edit your deployment scripts in `packages/hardhat/deploy`
-
-
-## Documentation
-
-Visit our [docs](https://docs.scaffoldeth.io) to learn how to start building with Scaffold-ETH 2.
-
-To know more about its features, check out our [website](https://scaffoldeth.io).
-
-## Contributing to Scaffold-ETH 2
-
-We welcome contributions to Scaffold-ETH 2!
-
-Please see [CONTRIBUTING.MD](https://github.com/scaffold-eth/scaffold-eth-2/blob/main/CONTRIBUTING.md) for more information and guidelines for contributing to Scaffold-ETH 2.
+**开发团队**: 黑客松团队  
+**预计开发时间**: 4小时  
+**技术栈**: Scaffold-ETH 2 + Next.js + Solidity  
+**目标**: 完成一个功能完整的MBTI性格测定dApp
