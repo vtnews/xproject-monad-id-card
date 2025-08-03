@@ -164,10 +164,10 @@ const TestPage = () => {
 
   if (!connectedAddress) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
+      <div className="flex items-center justify-center min-h-screen bg-base-200">
         <div className="text-center">
-          <h2 className="text-2xl font-bold mb-4">请先连接钱包</h2>
-          <p className="text-gray-600">连接钱包后才能开始MBTI测试</p>
+          <h2 className="text-2xl font-bold mb-4 text-base-content">请先连接钱包</h2>
+          <p className="text-base-content/70">连接钱包后才能开始MBTI测试</p>
         </div>
       </div>
     );
@@ -178,19 +178,19 @@ const TestPage = () => {
       <div className="max-w-2xl mx-auto px-4">
         {/* 头部 */}
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold mb-2">MBTI性格测试</h1>
-          <p className="text-gray-600">发现你的真实性格类型</p>
+          <h1 className="text-3xl font-bold mb-2 text-base-content">MBTI性格测试</h1>
+          <p className="text-base-content/70">发现你的真实性格类型</p>
         </div>
 
         {/* 进度条 */}
         <div className="mb-8">
           <div className="flex justify-between items-center mb-2">
-            <span className="text-sm font-medium">进度</span>
-            <span className="text-sm text-gray-600">
+            <span className="text-sm font-medium text-base-content">进度</span>
+            <span className="text-sm text-base-content/70">
               {currentQuestion + 1} / {questions.length}
             </span>
           </div>
-          <div className="w-full bg-gray-200 rounded-full h-2">
+          <div className="w-full bg-base-300 rounded-full h-2">
             <div
               className="bg-primary h-2 rounded-full transition-all duration-300"
               style={{ width: `${progress}%` }}
@@ -199,13 +199,13 @@ const TestPage = () => {
         </div>
 
         {/* 题目卡片 */}
-        <div className="bg-base-100 rounded-lg p-6 shadow-lg">
+        <div className="bg-base-100 rounded-lg p-6 shadow-lg border border-base-300">
           <div className="mb-6">
             <div className="flex items-center justify-between mb-4">
               <span className="text-sm font-medium text-primary">维度: {currentQ.dimension}</span>
-              <span className="text-sm text-gray-500">题目 {currentQ.id}</span>
+              <span className="text-sm text-base-content/60">题目 {currentQ.id}</span>
             </div>
-            <h3 className="text-xl font-semibold mb-6">{currentQ.question}</h3>
+            <h3 className="text-xl font-semibold mb-6 text-base-content">{currentQ.question}</h3>
           </div>
 
           {/* 选项 */}
@@ -216,14 +216,14 @@ const TestPage = () => {
                 onClick={() => handleAnswerSelect(option.value)}
                 className={`w-full p-4 text-left rounded-lg border-2 transition-all duration-200 ${
                   answers[currentQuestion] === option.value
-                    ? "border-primary bg-primary/10"
-                    : "border-gray-200 hover:border-primary/50"
+                    ? "border-primary bg-primary/10 text-base-content"
+                    : "border-base-300 hover:border-primary/50 text-base-content bg-base-100 hover:bg-base-200"
                 }`}
               >
                 <div className="flex items-start">
                   <div
                     className={`w-4 h-4 rounded-full border-2 mr-3 mt-1 ${
-                      answers[currentQuestion] === option.value ? "border-primary bg-primary" : "border-gray-300"
+                      answers[currentQuestion] === option.value ? "border-primary bg-primary" : "border-base-300"
                     }`}
                   >
                     {answers[currentQuestion] === option.value && (
@@ -242,7 +242,7 @@ const TestPage = () => {
               onClick={handlePrevious}
               disabled={currentQuestion === 0}
               className={`flex items-center px-4 py-2 rounded-lg ${
-                currentQuestion === 0 ? "text-gray-400 cursor-not-allowed" : "text-primary hover:bg-primary/10"
+                currentQuestion === 0 ? "text-base-content/40 cursor-not-allowed" : "text-primary hover:bg-primary/10"
               }`}
             >
               <ArrowLeftIcon className="w-4 h-4 mr-1" />
@@ -255,8 +255,8 @@ const TestPage = () => {
                 disabled={isSubmitting || answers.some(answer => answer === "")}
                 className={`px-6 py-2 rounded-lg font-medium ${
                   isSubmitting || answers.some(answer => answer === "")
-                    ? "bg-gray-300 text-gray-500 cursor-not-allowed"
-                    : "bg-primary text-white hover:bg-primary/90"
+                    ? "bg-base-300 text-base-content/50 cursor-not-allowed"
+                    : "bg-primary text-primary-content hover:bg-primary/90"
                 }`}
               >
                 {isSubmitting ? "提交中..." : "提交结果"}
@@ -266,7 +266,9 @@ const TestPage = () => {
                 onClick={handleNext}
                 disabled={!answers[currentQuestion]}
                 className={`flex items-center px-4 py-2 rounded-lg ${
-                  !answers[currentQuestion] ? "text-gray-400 cursor-not-allowed" : "text-primary hover:bg-primary/10"
+                  !answers[currentQuestion]
+                    ? "text-base-content/40 cursor-not-allowed"
+                    : "text-primary hover:bg-primary/10"
                 }`}
               >
                 下一题
@@ -277,7 +279,7 @@ const TestPage = () => {
         </div>
 
         {/* 底部提示 */}
-        <div className="text-center mt-8 text-sm text-gray-500">
+        <div className="text-center mt-8 text-sm text-base-content/60">
           <p>请根据你的真实想法选择答案，没有对错之分</p>
         </div>
       </div>

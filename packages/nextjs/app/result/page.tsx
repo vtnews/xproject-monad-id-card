@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useAccount } from "wagmi";
@@ -138,7 +138,7 @@ const mbtiDescriptions = {
   },
 };
 
-const ResultPage = () => {
+const ResultContent = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { address: connectedAddress } = useAccount();
@@ -205,9 +205,9 @@ const ResultPage = () => {
 
   if (!mbtiType) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
+      <div className="flex items-center justify-center min-h-screen bg-base-200">
         <div className="text-center">
-          <h2 className="text-2xl font-bold mb-4">加载中...</h2>
+          <h2 className="text-2xl font-bold mb-4 text-base-content">加载中...</h2>
         </div>
       </div>
     );
@@ -226,7 +226,7 @@ const ResultPage = () => {
           </Link>
           <button
             onClick={handleShare}
-            className="flex items-center px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90"
+            className="flex items-center px-4 py-2 bg-primary text-primary-content rounded-lg hover:bg-primary/90"
           >
             <ShareIcon className="w-5 h-5 mr-2" />
             分享结果
@@ -234,54 +234,54 @@ const ResultPage = () => {
         </div>
 
         {/* 主要结果展示 */}
-        <div className="bg-base-100 rounded-lg p-8 shadow-lg mb-8">
+        <div className="bg-base-100 rounded-lg p-8 shadow-lg mb-8 border border-base-300">
           <div className="text-center mb-8">
             <div
               className={`inline-block p-4 rounded-full bg-gradient-to-r ${mbtiInfo.color} text-white text-6xl font-bold mb-4`}
             >
               {mbtiType}
             </div>
-            <h1 className="text-3xl font-bold mb-2 text-white">{mbtiInfo.title}</h1>
-            <p className="text-xl text-white/80">{mbtiInfo.subtitle}</p>
+            <h1 className="text-3xl font-bold mb-2 text-base-content">{mbtiInfo.title}</h1>
+            <p className="text-xl text-base-content/80">{mbtiInfo.subtitle}</p>
           </div>
 
           {/* 性格描述 */}
           <div className="mb-8">
-            <h2 className="text-2xl font-semibold mb-4 text-white">性格特征</h2>
-            <p className="text-lg leading-relaxed text-white/90">{mbtiInfo.description}</p>
+            <h2 className="text-2xl font-semibold mb-4 text-base-content">性格特征</h2>
+            <p className="text-lg leading-relaxed text-base-content/90">{mbtiInfo.description}</p>
           </div>
 
           {/* 优势特点 */}
           <div className="mb-8">
-            <h2 className="text-2xl font-semibold mb-4 text-white">你的优势</h2>
+            <h2 className="text-2xl font-semibold mb-4 text-base-content">你的优势</h2>
             <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
               {mbtiInfo.strengths.map((strength, index) => (
                 <div
                   key={index}
                   className="bg-gradient-to-r from-primary/10 to-primary/5 p-4 rounded-lg border border-primary/20"
                 >
-                  <span className="text-white font-medium">{strength}</span>
+                  <span className="text-base-content font-medium">{strength}</span>
                 </div>
               ))}
             </div>
           </div>
 
           {/* 区块链保存 */}
-          <div className="border-t pt-6">
+          <div className="border-t border-base-300 pt-6">
             <div className="flex items-center justify-between">
               <div>
-                <h3 className="text-lg font-semibold mb-2 text-white">保存到区块链</h3>
-                <p className="text-white/80">将你的测试结果永久保存在区块链上，确保数据不可篡改</p>
+                <h3 className="text-lg font-semibold mb-2 text-base-content">保存到区块链</h3>
+                <p className="text-base-content/80">将你的测试结果永久保存在区块链上，确保数据不可篡改</p>
               </div>
               <button
                 onClick={handleSaveToBlockchain}
                 disabled={isSaving || isSaved}
                 className={`px-6 py-3 rounded-lg font-medium ${
                   isSaved
-                    ? "bg-green-500 text-white cursor-not-allowed"
+                    ? "bg-success text-success-content cursor-not-allowed"
                     : isSaving
-                      ? "bg-gray-300 text-gray-500 cursor-not-allowed"
-                      : "bg-primary text-white hover:bg-primary/90"
+                      ? "bg-base-300 text-base-content/50 cursor-not-allowed"
+                      : "bg-primary text-primary-content hover:bg-primary/90"
                 }`}
               >
                 {isSaved ? (
@@ -313,20 +313,22 @@ const ResultPage = () => {
       {/* 分享模态框 */}
       {showShareModal && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-          <div className="bg-base-100 p-6 rounded-lg max-w-md w-full mx-4">
-            <h3 className="text-lg font-semibold mb-4 text-white">分享你的MBTI结果</h3>
-            <p className="text-white/80 mb-4">复制以下链接分享给朋友：</p>
-            <div className="bg-base-200 p-3 rounded mb-4 break-all text-sm">{window.location.href}</div>
+          <div className="bg-base-100 p-6 rounded-lg max-w-md w-full mx-4 border border-base-300">
+            <h3 className="text-lg font-semibold mb-4 text-base-content">分享你的MBTI结果</h3>
+            <p className="text-base-content/80 mb-4">复制以下链接分享给朋友：</p>
+            <div className="bg-base-200 p-3 rounded mb-4 break-all text-sm text-base-content">
+              {window.location.href}
+            </div>
             <div className="flex gap-2">
               <button
                 onClick={copyToClipboard}
-                className="flex-1 px-4 py-2 bg-primary text-white rounded hover:bg-primary/90"
+                className="flex-1 px-4 py-2 bg-primary text-primary-content rounded hover:bg-primary/90"
               >
                 复制链接
               </button>
               <button
                 onClick={() => setShowShareModal(false)}
-                className="flex-1 px-4 py-2 bg-gray-300 text-gray-700 rounded hover:bg-gray-400"
+                className="flex-1 px-4 py-2 bg-base-300 text-base-content rounded hover:bg-base-400"
               >
                 取消
               </button>
@@ -335,6 +337,22 @@ const ResultPage = () => {
         </div>
       )}
     </div>
+  );
+};
+
+const ResultPage = () => {
+  return (
+    <Suspense
+      fallback={
+        <div className="flex items-center justify-center min-h-screen bg-base-200">
+          <div className="text-center">
+            <h2 className="text-2xl font-bold mb-4 text-base-content">加载中...</h2>
+          </div>
+        </div>
+      }
+    >
+      <ResultContent />
+    </Suspense>
   );
 };
 
